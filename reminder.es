@@ -4,8 +4,8 @@ import { PLUGIN_NAME, canBePushed } from './utils'
 
 const { dbg, toast } = window
 
-const logger = dbg.extra('poi-plugin-reminder')
-logger.enable()
+const logger = dbg.extra(PLUGIN_NAME)
+// logger.enable()
 
 class Reminder {
   ships = []

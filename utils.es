@@ -1,8 +1,9 @@
 import _ from 'lodash'
+import pkg from './package.json'
 
 const { getStore } = window
 
-export const PLUGIN_NAME = 'poi-plugin-ship-lock-reminder'
+export const PLUGIN_NAME = pkg.name
 
 export const canBePushed = ship => {
   if (_.isEmpty(ship)) {
