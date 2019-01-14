@@ -8,14 +8,14 @@ import { H4, Callout, Button, Collapse, NonIdealState } from '@blueprintjs/core'
 import { withNamespaces } from 'react-i18next'
 import { extensionSelectorFactory } from 'views/utils/selectors'
 
-import { unownedShipsSelector, selectedShipsSelector } from './selectors'
+import { unownedShipsSelector, selectedShipIdsSelector } from './selectors'
 import Panel from './panel'
 import { PLUGIN_NAME, logger } from '../utils'
 
 const ReminderWrapper = styled.div`
   padding: 10px;
 
-  h3 {
+  h4 {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -30,9 +30,9 @@ const Expand = styled(Button)`
   display: inline;
 `
 
-@withNamespaces([PLUGIN_NAME])
+@withNamespaces(PLUGIN_NAME)
 @connect(state => ({
-  selectedShips: selectedShipsSelector(state),
+  selectedShips: selectedShipIdsSelector(state),
   unownedShips: unownedShipsSelector(state),
   $shipTypes: get(state, 'const.$shipTypes'),
   picture: get(extensionSelectorFactory(PLUGIN_NAME)(state), 'picture', {}),
@@ -66,49 +66,43 @@ class ShipReminder extends React.PureComponent {
     logger.log('unownedShips: \n', unownedShips)
     return isInitialed ? (
       <ReminderWrapper>
-        {mode === 'picture' ? (
-          <>
-            <H4>{t('Picture info')}</H4>
-            <Tip minimal intent="primary">
-              {isEmpty(picture.list)
-                ? t('Please check picture first')
-                : t('updateTimestamp', {
-                    timestamp: moment(picture.timestamp).format(
-                      'YYYY/MM/DD HH:mm:ss',
-                    ),
-                  })}
-            </Tip>
-          </>
-        ) : (
-          <>
-            <H4>
-              {t('Unowned ships')}
-              <Expand
-                text={t('Expand')}
-                intent="primary"
-                onClick={() => this.setState({ isOpen: !isOpen })}
-              />
-            </H4>
-            <Collapse isOpen={isOpen} keepChildrenMounted>
-              <Tip minimal intent="primary">
-                {t('Will not notify checked ships')}
-              </Tip>
-              {map(groupBy(unownedShips, s => s.api_stype), (ships, type) => {
-                const panelShipsProp = map(ships, s => ({
-                  name: s.api_name,
-                  id: s.api_id,
-                  checked: !!find(selectedShips, ss => s.api_id === ss),
-                }))
-                return (
-                  <Panel
-                    title={$shipTypes[type].api_name}
-                    ships={panelShipsProp}
-                  />
-                )
+        <H4>{t('Picture info')}</H4>
+        <Tip minimal intent="primary">
+          {isEmpty(picture.list)
+            ? t('Please check picture first')
+            : t('updateTimestamp', {
+                timestamp: map(
+                  picture.timestamp,
+                  (ts, page) =>
+                    `${page}: ${moment(ts).format('YYYY/MM/DD HH:mm:ss')}`,
+                ).join('\n'),
               })}
-            </Collapse>
-          </>
-        )}
+        </Tip>
+        <H4>
+          {t('Unowned ships')}
+          <Expand
+            text={t('Expand')}
+            intent="primary"
+            disabled={mode !== 'custom'}
+            onClick={() => this.setState({ isOpen: !isOpen })}
+          />
+        </H4>
+        {mode !== 'custom' ? <Tip>{t('customTipWhenModeIsPicture')}</Tip> : ''}
+        <Collapse isOpen={isOpen} keepChildrenMounted>
+          <Tip minimal intent="primary">
+            {t('Will not notify checked ships')}
+          </Tip>
+          {map(groupBy(unownedShips, s => s.api_stype), (ships, type) => {
+            const panelShipsProp = map(ships, s => ({
+              name: s.api_name,
+              id: s.api_id,
+              checked: !!find(selectedShips, ss => s.api_id === ss),
+            }))
+            return (
+              <Panel title={$shipTypes[type].api_name} ships={panelShipsProp} />
+            )
+          })}
+        </Collapse>
       </ReminderWrapper>
     ) : (
       <NonIdealState

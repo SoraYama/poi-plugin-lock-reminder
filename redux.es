@@ -1,26 +1,35 @@
 import { combineReducers } from 'redux'
-import { compareUpdate } from 'views/utils/tools'
-import { keyBy, get } from 'lodash'
+// import { keyBy, get, map } from 'lodash'
+import { get, map, uniq, flatMap, compact } from 'lodash'
+import { shipRemodelInfoSelector } from 'views/utils/selectors'
 
 import { PLUGIN_NAME, logger } from './utils'
 
 const LS_PATH = '_lock-reminder'
 
-const indexify = data => keyBy(data, 'api_table_id')
+const { getStore } = window
 
-export const CACHE = (() => {
+const { originMstIdOf } = shipRemodelInfoSelector(getStore())
+
+// const indexify = data =>
+//   keyBy(data, s => get(s, 'api_table_id.0', '1'))
+
+export const getCache = () => {
   const item = window.isSafeMode ? '{}' : localStorage.getItem(LS_PATH)
   return JSON.parse(item || '{}')
-})()
+}
 
-const picture = (state = CACHE, action) => {
+const picture = (state = getCache(), action) => {
   const { type, payload = {} } = action
   const { list = {}, timestamp } = payload
   switch (type) {
     case `@@${PLUGIN_NAME}@record@pictureBook`: {
-      const newState = indexify(list.api_list)
+      const newState = compact(
+        uniq(map(flatMap(list), s => originMstIdOf[get(s, 'api_table_id.0')])),
+      )
+      logger.log('newstate, payload, mapped', newState, payload, map(list))
       return {
-        list: compareUpdate(newState, get(state, 'body.api_list', {})),
+        list: newState,
         timestamp,
       }
     }
@@ -29,19 +38,24 @@ const picture = (state = CACHE, action) => {
   }
 }
 
-export const recordPictureData = list => {
-  logger.log('recordPicData:', list)
+export const recordPictureData = (data, page) => {
+  const origin = getCache()
+  logger.log('recordPicData:', data, page)
   const payload = {
-    list,
-    timestamp: Date.now(),
+    list: {
+      ...get(origin, 'list', {}),
+      [page]: get(data, 'api_list', null),
+    },
+    timestamp: {
+      ...get(origin, 'timestamp', {}),
+      [page]: Date.now(),
+    },
   }
   window.dispatch({
     type: `@@${PLUGIN_NAME}@record@pictureBook`,
     payload,
   })
-  process.nextTick(() => {
-    localStorage.setItem(LS_PATH, JSON.stringify(payload || {}))
-  })
+  localStorage.setItem(LS_PATH, JSON.stringify(payload || {}))
 }
 
 export const reducer = combineReducers({

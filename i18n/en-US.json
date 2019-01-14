@@ -8,5 +8,6 @@
   "Will not notify checked ships": "Will not notify checked ships",
   "updateTimestamp": "Latest picture data updated at: {{timestamp}}",
   "NonIdealDesc": "Please enter game first.",
-  "No game data": "No game data for now"
+  "No game data": "No game data for now",
+  "customTipWhenModeIsPicture": "Enable custom in 'settings -> plugins -> Ship Reminder'"
 }

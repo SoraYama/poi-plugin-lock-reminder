@@ -23,8 +23,8 @@ class Reminder {
         this.record()
         break
       case '/kcsapi/api_get_member/picture_book': {
-        if (_.get(postBody, 'api_type') === 1) {
-          this.handleEnterPictureBook()
+        if (_.get(postBody, 'api_type') === '1') {
+          this.handleEnterPictureBook(_.get(postBody, 'api_no', '1'))
         }
         break
       }
@@ -55,8 +55,8 @@ class Reminder {
     this.currentRes = {}
   }
 
-  handleEnterPictureBook = () => {
-    recordPictureData(this.currentRes.body)
+  handleEnterPictureBook = page => {
+    recordPictureData(this.currentRes.body, page)
   }
 
   publish = () => {

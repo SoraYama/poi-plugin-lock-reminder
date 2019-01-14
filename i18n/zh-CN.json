@@ -8,5 +8,6 @@
   "Will not notify checked ships": "勾选中的舰娘将不再提醒",
   "updateTimestamp": "图鉴最近更新时间：{{timestamp}}",
   "NonIdealDesc": "请先进入游戏",
-  "No game data": "暂无游戏数据"
+  "No game data": "暂无游戏数据",
+  "customTipWhenModeIsPicture": "在'设置 -> 扩展程序 -> 新船提示'的设置中启用自定义模式"
 }
