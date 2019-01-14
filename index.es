@@ -6,5 +6,11 @@ export const pluginDidLoad = () => {
 }
 
 export const pluginWillUnload = () => {
-  window.addEventListener('game.response', reminder.handler)
+  window.removeEventListener('game.response', reminder.handler)
 }
+
+export settingsClass from './settings-class'
+
+export reactClass from './views/index'
+
+export { reducer } from './redux'

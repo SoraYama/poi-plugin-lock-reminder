@@ -1,11 +1,9 @@
 import _ from 'lodash'
 import i18next from 'views/env-parts/i18next'
-import { PLUGIN_NAME, canBePushed } from './utils'
+import { PLUGIN_NAME, canBePushed, logger } from './utils'
+import { recordPictureData } from './redux'
 
-const { dbg, toast } = window
-
-const logger = dbg.extra(PLUGIN_NAME)
-// logger.enable()
+const { toast } = window
 
 class Reminder {
   ships = []
@@ -13,7 +11,7 @@ class Reminder {
   currentRes = {}
 
   handler = e => {
-    const { path, body } = e.detail
+    const { path, body, postBody } = e.detail
     logger.log('\npath', path, '\nbody', body)
     this.currentRes = { path, body }
 
@@ -24,6 +22,12 @@ class Reminder {
       case '/kcsapi/api_req_sortie/battleresult':
         this.record()
         break
+      case '/kcsapi/api_get_member/picture_book': {
+        if (_.get(postBody, 'api_type') === 1) {
+          this.handleEnterPictureBook()
+        }
+        break
+      }
       case '/kcsapi/api_port/port':
         this.publish()
         break
@@ -49,6 +53,10 @@ class Reminder {
   reset = () => {
     this.ships = []
     this.currentRes = {}
+  }
+
+  handleEnterPictureBook = () => {
+    recordPictureData(this.currentRes.body)
   }
 
   publish = () => {

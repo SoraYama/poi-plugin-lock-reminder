@@ -1,9 +1,11 @@
 import _ from 'lodash'
 import pkg from './package.json'
 
-const { getStore } = window
+const { getStore, dbg } = window
 
 export const PLUGIN_NAME = pkg.name
+
+export const logger = dbg.extra(PLUGIN_NAME)
 
 export const canBePushed = ship => {
   if (_.isEmpty(ship)) {
@@ -16,3 +18,5 @@ export const canBePushed = ship => {
     ),
   )
 }
+
+export const CONFIG_PATH = `plugin.${PLUGIN_NAME}.selectedShips`

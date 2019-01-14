@@ -1,5 +1,12 @@
 {
   "Ship Reminder": "新船提示",
   "Remind to lock new KanMusu": "提示新舰娘上锁，防止一日成侠",
-  "New KanMusu {{ships}} joined, remember to lock": "新舰娘{{ships}}加入啦，记得上锁POI!"
+  "Expand": "展开",
+  "New KanMusu {{ships}} joined, remember to lock": "新舰娘{{ships}}加入啦，记得上锁POI!",
+  "Unowned ships": "暂未获得的舰娘",
+  "Picture info": "图鉴信息",
+  "Will not notify checked ships": "勾选中的舰娘将不再提醒",
+  "updateTimestamp": "图鉴最近更新时间：{{timestamp}}",
+  "NonIdealDesc": "请先进入游戏",
+  "No game data": "暂无游戏数据"
 }
