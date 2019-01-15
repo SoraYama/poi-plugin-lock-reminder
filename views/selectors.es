@@ -45,7 +45,7 @@ export const selectedShipIdsSelector = createSelector(
 export const customModeShouldNotifiedSelector = createSelector(
   [unownedShipsSelector, selectedShipIdsSelector],
   (uShips, sShipIds) =>
-    _.filter(uShips, ship => _.indexOf(sShipIds, +ship.api_id) >= 0),
+    _.filter(uShips, ship => _.indexOf(sShipIds, +ship.api_id) === -1),
 )
 
 export const pictureModeShouldNotifiedSelector = createSelector(
