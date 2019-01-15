@@ -2,9 +2,28 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { connect } from 'react-redux'
-import { map, groupBy, get, find, every, isEmpty } from 'lodash'
+import {
+  map,
+  groupBy,
+  get,
+  find,
+  every,
+  isEmpty,
+  flatMap,
+  compact,
+} from 'lodash'
 import styled from 'styled-components'
-import { H4, Callout, Button, Collapse, NonIdealState } from '@blueprintjs/core'
+import {
+  H4,
+  H5,
+  Callout,
+  Button,
+  Collapse,
+  NonIdealState,
+  Tooltip,
+  Icon,
+  Intent,
+} from '@blueprintjs/core'
 import { withNamespaces } from 'react-i18next'
 import { extensionSelectorFactory } from 'views/utils/selectors'
 
@@ -17,8 +36,15 @@ const ReminderWrapper = styled.div`
 
   h4 {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+
+    .bp3-popover-wrapper {
+      margin-left: 5px;
+
+      .bp3-popover-target {
+        display: flex;
+      }
+    }
   }
 `
 
@@ -26,8 +52,23 @@ const Tip = styled(Callout)`
   margin-bottom: 10px;
 `
 
+const PictureTipWrapper = styled(Tip)`
+  filter: ${props => (props.disabled ? 'blur(4px)' : 'none')};
+`
+
 const Expand = styled(Button)`
   display: inline;
+  margin-left: 15px;
+`
+
+const PictureStatusTable = styled.table`
+  width: 100%;
+
+  td {
+    border: 1px solid #a7b6c2;
+    text-align: center;
+    vertical-align: middle;
+  }
 `
 
 @withNamespaces(PLUGIN_NAME)
@@ -49,7 +90,7 @@ class ShipReminder extends React.PureComponent {
   }
 
   state = {
-    isOpen: false,
+    customIsOpen: false,
   }
 
   render() {
@@ -61,37 +102,33 @@ class ShipReminder extends React.PureComponent {
       picture,
       mode,
     } = this.props
-    const { isOpen } = this.state
+    const { customIsOpen } = this.state
     const isInitialed = !every(unownedShips, s => isEmpty(s))
+    const pageOptions = Array(6)
+      .fill()
+      .map((_, idx) => idx + 1)
     logger.log('unownedShips: \n', unownedShips)
     return isInitialed ? (
       <ReminderWrapper>
-        <H4>{t('Picture info')}</H4>
-        <Tip minimal intent="primary">
-          {isEmpty(picture.list)
-            ? t('Please check picture first')
-            : t('updateTimestamp', {
-                timestamp: map(
-                  picture.timestamp,
-                  (ts, page) =>
-                    `${page}: ${moment(ts).format('YYYY/MM/DD HH:mm:ss')}`,
-                ).join('\n'),
-              })}
-        </Tip>
         <H4>
-          {t('Unowned ships')}
+          {t('Custom mode')}
+          <Tooltip
+            content={t('Will not notify checked ships')}
+            intent={Intent.PRIMARY}
+          >
+            <Icon icon="info-sign" />
+          </Tooltip>
           <Expand
-            text={t('Expand')}
+            text={t(customIsOpen ? 'Collapse' : 'Expand')}
             intent="primary"
+            minimal
             disabled={mode !== 'custom'}
-            onClick={() => this.setState({ isOpen: !isOpen })}
+            onClick={() => this.setState({ customIsOpen: !customIsOpen })}
           />
         </H4>
         {mode !== 'custom' ? <Tip>{t('customTipWhenModeIsPicture')}</Tip> : ''}
-        <Collapse isOpen={isOpen} keepChildrenMounted>
-          <Tip minimal intent="primary">
-            {t('Will not notify checked ships')}
-          </Tip>
+        <Collapse isOpen={customIsOpen} keepChildrenMounted>
+          <H5>{t('Unowned ships')}</H5>
           {map(groupBy(unownedShips, s => s.api_stype), (ships, type) => {
             const panelShipsProp = map(ships, s => ({
               name: s.api_name,
@@ -103,6 +140,60 @@ class ShipReminder extends React.PureComponent {
             )
           })}
         </Collapse>
+        <H4>
+          {t('Picture mode')}
+          <Tooltip content={t('pictureIntroduce')} intent={Intent.PRIMARY}>
+            <Icon icon="info-sign" />
+          </Tooltip>
+        </H4>
+        {mode !== 'picture' ? <Tip>{t('pictureTipWhenModeIsCustom')}</Tip> : ''}
+        <PictureTipWrapper disabled={mode !== 'picture'}>
+          {isEmpty(picture.list) ? (
+            t('enterPicture')
+          ) : (
+            <>
+              {t('Updated info')}
+              <PictureStatusTable>
+                <thead>
+                  <tr>
+                    {map(pageOptions, op => (
+                      <td key={`key-${op}`}>{t('page', { page: op })}</td>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    {map(pageOptions, op => (
+                      <td
+                        key={`key-${op}`}
+                        style={{
+                          background: picture.timestamp[op]
+                            ? '#15b37150'
+                            : '#f5565650',
+                        }}
+                      >
+                        {picture.timestamp[op] ? (
+                          <Tooltip
+                            content={moment(picture.timestamp[op]).format(
+                              'YYYY/MM/DD HH:mm:ss',
+                            )}
+                          >
+                            <Icon icon="tick" />
+                          </Tooltip>
+                        ) : (
+                          <Icon icon="cross" />
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                </tbody>
+              </PictureStatusTable>
+              {t('shipRecorded', {
+                ships: compact(flatMap(picture.list)).length || '-',
+              })}
+            </>
+          )}
+        </PictureTipWrapper>
       </ReminderWrapper>
     ) : (
       <NonIdealState

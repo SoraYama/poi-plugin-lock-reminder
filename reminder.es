@@ -76,6 +76,7 @@ class Reminder {
       {
         intent: 'success',
         icon: 'tick',
+        timeout: 0,
       },
     )
     this.reset()
