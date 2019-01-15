@@ -53,7 +53,7 @@ const Tip = styled(Callout)`
 `
 
 const PictureTipWrapper = styled(Tip)`
-  filter: ${props => (props.disabled ? 'blur(4px)' : 'none')};
+  display: ${props => (props.disabled ? 'none' : '')};
 `
 
 const Expand = styled(Button)`
@@ -90,7 +90,13 @@ class ShipReminder extends React.PureComponent {
   }
 
   state = {
-    customIsOpen: false,
+    customIsOpen: true,
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.mode === 'custom') {
+      this.setState({ customIsOpen: true })
+    }
   }
 
   render() {
@@ -108,6 +114,9 @@ class ShipReminder extends React.PureComponent {
       .fill()
       .map((_, idx) => idx + 1)
     logger.log('unownedShips: \n', unownedShips)
+    if (mode === 'picture') {
+      this.setState({ customIsOpen: false })
+    }
     return isInitialed ? (
       <ReminderWrapper>
         <H4>
@@ -129,16 +138,23 @@ class ShipReminder extends React.PureComponent {
         {mode !== 'custom' ? <Tip>{t('customTipWhenModeIsPicture')}</Tip> : ''}
         <Collapse isOpen={customIsOpen} keepChildrenMounted>
           <H5>{t('Unowned ships')}</H5>
-          {map(groupBy(unownedShips, s => s.api_stype), (ships, type) => {
-            const panelShipsProp = map(ships, s => ({
-              name: s.api_name,
-              id: s.api_id,
-              checked: !!find(selectedShips, ss => s.api_id === ss),
-            }))
-            return (
-              <Panel title={$shipTypes[type].api_name} ships={panelShipsProp} />
-            )
-          })}
+          {isEmpty(unownedShips) ? (
+            <Tip intent={Intent.SUCCESS}>{t('No unowned ship')}</Tip>
+          ) : (
+            map(groupBy(unownedShips, s => s.api_stype), (ships, type) => {
+              const panelShipsProp = map(ships, s => ({
+                name: s.api_name,
+                id: s.api_id,
+                checked: !!find(selectedShips, ss => s.api_id === ss),
+              }))
+              return (
+                <Panel
+                  title={$shipTypes[type].api_name}
+                  ships={panelShipsProp}
+                />
+              )
+            })
+          )}
         </Collapse>
         <H4>
           {t('Picture mode')}

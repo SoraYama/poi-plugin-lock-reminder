@@ -19,5 +19,6 @@
   "pictureIntroduce": "图鉴模式下仅会提示图鉴中没有的舰娘",
   "customTipWhenModeIsPicture": "当前通知模式为图鉴模式。如需启用自定义模式，请在“设置 -> 扩展程序 -> 新船提示”中设置",
   "enterPicture": "请先进入图鉴，并点击所有舰娘页签以记录",
-  "shipRecorded": "共计{{ships}}条舰娘图鉴记录"
+  "shipRecorded": "共计{{ships}}条舰娘图鉴记录",
+  "No unowned ship": "全船大佬，暂时没有可提醒的舰娘啦！"
 }
