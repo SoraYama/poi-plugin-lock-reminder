@@ -26,7 +26,7 @@
     "icon": "fa/lock",
     "priority": 99,
     "apiVer": {
-      "10.99.99": "0.1.1"
+      "10.99.99": "1.0.0"
     }
   },
   "devDependencies": {
