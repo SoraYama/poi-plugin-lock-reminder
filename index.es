@@ -1,7 +1,10 @@
 import reminder from './reminder'
 
 export const pluginDidLoad = () => {
-  window.reminder = reminder
+  // for debug
+  if (window.dbg && window.dbg.isEnabled()) {
+    window.reminder = reminder
+  }
   window.addEventListener('game.response', reminder.handler)
 }
 

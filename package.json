@@ -7,7 +7,7 @@
     "reset": "git clean -f && git checkout . && git submodule foreach git checkout . && git submodule foreach git clean -f",
     "prepack": "poi-util-transpile --sm --replace",
     "postpublish": "npm run reset",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "lint": "eslint . --ext .es",
     "lint:fix": "eslint . --ext .es --fix"
   },
@@ -18,6 +18,11 @@
   "author": {
     "name": "SoraYama",
     "url": "https://sorayama.me"
+  },
+  "homepage": "https://github.com/SoraYama/poi-plugin-lock-reminder",
+  "bugs": {
+    "url": "https://github.com/SoraYama/poi-plugin-lock-reminder/issues",
+    "email": "sorayamahou@gmail.com"
   },
   "license": "MIT",
   "poiPlugin": {
