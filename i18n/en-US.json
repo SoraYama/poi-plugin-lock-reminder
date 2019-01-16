@@ -11,8 +11,9 @@
   "pictureTipWhenModeIsCustom": "Enable picture mode in 'settings -> plugins -> Ship Reminder' if necessary",
   "New KanMusu {{ships}} joined, remember to lock": "New KanMusu {{ships}} joined, remember to lock :)",
   "Unowned ships": "Unowned ships",
+  "All ships": "All ships",
   "Picture info": "Picture info",
-  "Will not notify checked ships": "Will not notify checked ships",
+  "Will not notify checked ships": "In custom mode, ships not in the fleet will be notified unless notification method configured.",
   "updateTimestamp": "Latest picture data updated at: {{timestamp}}",
   "NonIdealDesc": "Please enter game first.",
   "No game data": "No game data for now",
@@ -20,5 +21,8 @@
   "customTipWhenModeIsPicture": "Enable custom mode in 'settings -> plugins -> Ship Reminder' if necessary",
   "enterPicture": "Please enter 'Assets' first, then click all page tags to record.",
   "shipRecorded": "{{ships}} KanMusu recorded in Assets.",
-  "No unowned ship": "Congratulations! You've collected all KanMusu for now."
+  "No unowned ship": "Congratulations! You've collected all KanMusu for now.",
+  "will not be notified": "will not be notified",
+  "will be notified": "will be notified",
+  "Selected ships will": "Selected ships will"
 }

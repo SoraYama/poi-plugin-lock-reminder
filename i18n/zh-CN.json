@@ -11,8 +11,9 @@
   "pictureTipWhenModeIsCustom": "当前通知模式为自定义模式。如需启用图鉴模式，请在“设置 -> 扩展程序 -> 新船提示”中设置",
   "New KanMusu {{ships}} joined, remember to lock": "新舰娘{{ships}}加入啦，记得上锁POI!",
   "Unowned ships": "暂未获得的舰娘",
+  "All ships": "全部舰娘",
   "Picture info": "图鉴信息",
-  "Will not notify checked ships": "自定义模式下会提示舰队里没有的舰娘，勾选中的舰娘将不再提醒",
+  "Will not notify checked ships": "自定义模式下会提示舰队里没有的舰娘，可配置勾选中的舰娘的提醒策略",
   "updateTimestamp": "图鉴最近更新时间：{{timestamp}}",
   "NonIdealDesc": "请先进入游戏",
   "No game data": "暂无游戏数据",
@@ -20,5 +21,8 @@
   "customTipWhenModeIsPicture": "当前通知模式为图鉴模式。如需启用自定义模式，请在“设置 -> 扩展程序 -> 新船提示”中设置",
   "enterPicture": "请先进入图鉴，并点击所有舰娘页签以记录",
   "shipRecorded": "共计{{ships}}条舰娘图鉴记录",
-  "No unowned ship": "全船大佬，暂时没有可提醒的舰娘啦！"
+  "No unowned ship": "全船大佬，暂时没有可提醒的舰娘啦！",
+  "will not be notified": "不被提醒",
+  "will be notified": "被提醒",
+  "Selected ships will": "选中的舰娘将"
 }

@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import pkg from './package.json'
 import {
+  selectedShipsSelector,
   customModeShouldNotifiedSelector,
   pictureModeShouldNotifiedSelector,
 } from './views/selectors'
@@ -16,19 +17,23 @@ export const canBePushed = ship => {
     return false
   }
   const mode = getStore(`config.plugin.${PLUGIN_NAME}.mode`)
-  const customModeShouldNotifiedShips = customModeShouldNotifiedSelector(
-    getStore(),
-  )
+  const category = getStore(`config.plugin.${PLUGIN_NAME}.customNotifyCategory`)
+  const customModeSelectedShips = selectedShipsSelector(getStore())
+  const customModeUnownedShips = customModeShouldNotifiedSelector(getStore())
   const pictureModeShouldNotifiedShips = pictureModeShouldNotifiedSelector(
     getStore(),
   )
-  logger.log('customModeShouldNotifiedShips', customModeShouldNotifiedShips)
+  logger.log('customModeShouldNotifiedShips', customModeUnownedShips)
   logger.log('pictureModeShouldNotifiedShips', pictureModeShouldNotifiedShips)
   const shipIsIn = group =>
     !!_.find(group, s => +s.api_id === +ship.api_ship_id)
-  return mode === 'custom'
-    ? shipIsIn(customModeShouldNotifiedShips)
-    : shipIsIn(pictureModeShouldNotifiedShips)
+
+  if (mode === 'custom') {
+    return category === 'willnot'
+      ? shipIsIn(customModeUnownedShips)
+      : shipIsIn(customModeSelectedShips)
+  }
+  return shipIsIn(pictureModeShouldNotifiedShips)
 }
 
 export const CONFIG_PATH = `plugin.${PLUGIN_NAME}.selectedShips`

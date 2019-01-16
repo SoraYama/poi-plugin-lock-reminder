@@ -27,9 +27,14 @@ import {
 import { withNamespaces } from 'react-i18next'
 import { extensionSelectorFactory } from 'views/utils/selectors'
 
-import { unownedShipsSelector, selectedShipIdsSelector } from './selectors'
+import {
+  unownedShipsSelector,
+  selectedShipIdsSelector,
+  originShipsSelector,
+} from './selectors'
 import Panel from './panel'
 import { PLUGIN_NAME, logger } from '../utils'
+import RadioCheck from '../settings-class/radio-config'
 
 const ReminderWrapper = styled.div`
   padding: 10px;
@@ -75,18 +80,26 @@ const PictureStatusTable = styled.table`
 @connect(state => ({
   selectedShips: selectedShipIdsSelector(state),
   unownedShips: unownedShipsSelector(state),
+  originShips: originShipsSelector(state),
   $shipTypes: get(state, 'const.$shipTypes'),
   picture: get(extensionSelectorFactory(PLUGIN_NAME)(state), 'picture', {}),
   mode: get(state, `config.plugin.${PLUGIN_NAME}.mode`, 'custom'),
+  category: get(
+    state,
+    `config.plugin.${PLUGIN_NAME}.customNotifyCategory`,
+    'willnot',
+  ),
 }))
 class ShipReminder extends React.PureComponent {
   static propTypes = {
     unownedShips: PropTypes.array,
     selectedShips: PropTypes.array,
+    originShips: PropTypes.array,
     t: PropTypes.func.isRequired,
     $shipTypes: PropTypes.object,
     picture: PropTypes.object,
     mode: PropTypes.string,
+    category: PropTypes.string,
   }
 
   state = {
@@ -103,10 +116,12 @@ class ShipReminder extends React.PureComponent {
     const {
       selectedShips,
       unownedShips,
+      originShips,
       $shipTypes,
       t,
       picture,
       mode,
+      category,
     } = this.props
     const { customIsOpen } = this.state
     const isInitialed = !every(unownedShips, s => isEmpty(s))
@@ -137,23 +152,52 @@ class ShipReminder extends React.PureComponent {
         </H4>
         {mode !== 'custom' ? <Tip>{t('customTipWhenModeIsPicture')}</Tip> : ''}
         <Collapse isOpen={customIsOpen} keepChildrenMounted>
-          <H5>{t('Unowned ships')}</H5>
-          {isEmpty(unownedShips) ? (
+          <RadioCheck
+            label={t('Selected ships will')}
+            configName={`plugin.${PLUGIN_NAME}.customNotifyCategory`}
+            default="willnot"
+            options={[
+              {
+                label: t('will not be notified'),
+                value: 'willnot',
+              },
+              {
+                label: t('will be notified'),
+                value: 'will',
+              },
+            ]}
+          />
+          {isEmpty(unownedShips) && category === 'willnot' ? (
             <Tip intent={Intent.SUCCESS}>{t('No unowned ship')}</Tip>
           ) : (
-            map(groupBy(unownedShips, s => s.api_stype), (ships, type) => {
-              const panelShipsProp = map(ships, s => ({
-                name: s.api_name,
-                id: s.api_id,
-                checked: !!find(selectedShips, ss => s.api_id === ss),
-              }))
-              return (
-                <Panel
-                  title={$shipTypes[type].api_name}
-                  ships={panelShipsProp}
-                />
-              )
-            })
+            <>
+              <H5>
+                {t(category === 'willnot' ? 'Unowned ships' : 'All ships')}（
+                {category === 'willnot'
+                  ? unownedShips.length
+                  : originShips.length}
+                ）
+              </H5>
+              {map(
+                groupBy(
+                  category === 'willnot' ? unownedShips : originShips,
+                  s => s.api_stype,
+                ),
+                (ships, type) => {
+                  const panelShipsProp = map(ships, s => ({
+                    name: s.api_name,
+                    id: s.api_id,
+                    checked: !!find(selectedShips, ss => s.api_id === ss),
+                  }))
+                  return (
+                    <Panel
+                      title={$shipTypes[type].api_name}
+                      ships={panelShipsProp}
+                    />
+                  )
+                },
+              )}
+            </>
           )}
         </Collapse>
         <H4>

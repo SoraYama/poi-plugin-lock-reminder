@@ -44,7 +44,7 @@ class Panel extends React.PureComponent {
     return (
       <PanelWrapper>
         <Header onClick={() => this.setState({ isOpen: !isOpen })}>
-          {title}
+          {`${title}（${ships.length}）`}
           <Icon icon={`chevron-${isOpen ? 'up' : 'down'}`} />
         </Header>
         <Collapse isOpen={isOpen} keepChildrenMounted>

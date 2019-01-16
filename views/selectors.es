@@ -24,6 +24,13 @@ export const unownedShipsSelector = createSelector(
     ),
 )
 
+export const originShipsSelector = createSelector(
+  constSelector,
+  shipRemodelInfoSelector,
+  ({ $ships }, { remodelChains }) =>
+    _.map(_.keys(remodelChains), k => _.find($ships, s => +s.api_id === +k)),
+)
+
 export const pictureUnownedShipsSelector = createSelector(
   [extensionSelectorFactory(PLUGIN_NAME), unownedShipsSelector],
   ({ picture: pictureOwnedShipIds }, uShips) => {
@@ -40,6 +47,12 @@ export const pictureUnownedShipsSelector = createSelector(
 export const selectedShipIdsSelector = createSelector(
   configSelector,
   config => _.get(config, CONFIG_PATH, []),
+)
+
+export const selectedShipsSelector = createSelector(
+  selectedShipIdsSelector,
+  constSelector,
+  (ids, { $ships }) => _.map(ids, id => _.find($ships, s => +s.api_id === +id)),
 )
 
 export const customModeShouldNotifiedSelector = createSelector(
