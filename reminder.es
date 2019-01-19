@@ -3,10 +3,10 @@ import i18next from 'views/env-parts/i18next'
 import { PLUGIN_NAME, canBePushed, logger } from './utils'
 import { recordPictureData } from './redux'
 
-const { toast } = window
+const { toast, getStore } = window
 
 class Reminder {
-  ships = []
+  shipIds = []
 
   currentRes = {}
 
@@ -19,9 +19,32 @@ class Reminder {
       case '/kcsapi/api_req_map/start':
         this.start()
         break
-      case '/kcsapi/api_req_sortie/battleresult':
-        this.record()
+      case '/kcsapi/api_req_sortie/battleresult': {
+        const dropShipId = _.get(
+          this.currentRes,
+          'body.api_get_ship.api_ship_id',
+          null,
+        )
+        logger.log('dropShipId: ', dropShipId)
+        // 海域攻略報酬 イベント海域突破時のみ存在
+        const eventItem = _.get(this.currentRes, 'body.api_get_eventitem', {})
+        let eventRewardShipId = null
+        // 報酬種別 1=アイテム, 2=艦娘, 3=装備, 5=家具
+        if (eventItem.type === 2) {
+          eventRewardShipId = eventItem.id
+        }
+        this.checkPush(eventRewardShipId, dropShipId)
         break
+      }
+      case '/kcsapi/api_req_quest/clearitemget': {
+        // 11=艦船
+        const bonus = _.get(this.currentRes, 'body.api_api_bounus', {})
+        logger.log('quest clear bonus: ', bonus)
+        if (+_.get(bonus, 'api_type', null) === 11) {
+          this.checkPush(_.get(bonus, 'api_item.api_ship_id', null))
+        }
+        break
+      }
       case '/kcsapi/api_get_member/picture_book': {
         if (_.get(postBody, 'api_type') === '1') {
           this.handleEnterPictureBook(_.get(postBody, 'api_no', '1'))
@@ -41,17 +64,16 @@ class Reminder {
     this.reset()
   }
 
-  record = () => {
-    const dropShip = _.get(this.currentRes, 'body.api_get_ship', null)
-    logger.log('dropShip: ', dropShip)
-    if (canBePushed(dropShip)) {
-      this.ships.push(dropShip)
-      logger.log('ships: ', this.ships)
-    }
+  checkPush = (...ids) => {
+    _.each(ids, id => {
+      if (canBePushed(id)) {
+        this.shipIds.push(id)
+      }
+    })
   }
 
   reset = () => {
-    this.ships = []
+    this.shipIds = []
     this.currentRes = {}
   }
 
@@ -60,25 +82,30 @@ class Reminder {
   }
 
   publish = () => {
-    if (_.isEmpty(this.ships)) {
+    if (_.isEmpty(this.shipIds)) {
       logger.log('current ship queue is empty, nothing to do')
       return
     }
-    const shipNames = _.map(this.ships, ship => ship.api_ship_name)
-    logger.log('shipNames: ', shipNames)
-    toast(
-      i18next.t(
-        `${PLUGIN_NAME}:New KanMusu {{ships}} joined, remember to lock`,
-        {
-          ships: shipNames.join(', '),
-        },
-      ),
-      {
-        intent: 'success',
-        icon: 'tick',
-        timeout: 0,
-      },
+    const shipNames = _.map(
+      this.shipIds,
+      id => getStore(`const.$ships.${id}.api_name`) || '',
     )
+    logger.log('shipNames: ', shipNames)
+    if (!_.isEmpty(_.compact(shipNames))) {
+      toast(
+        i18next.t(
+          `${PLUGIN_NAME}:New KanMusu {{ships}} joined, remember to lock`,
+          {
+            ships: shipNames.join(', '),
+          },
+        ),
+        {
+          intent: 'success',
+          icon: 'tick',
+          timeout: 0,
+        },
+      )
+    }
     this.reset()
   }
 }

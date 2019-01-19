@@ -12,8 +12,8 @@ export const PLUGIN_NAME = pkg.name
 
 export const logger = dbg.extra(PLUGIN_NAME)
 
-export const canBePushed = ship => {
-  if (_.isEmpty(ship)) {
+export const canBePushed = shipId => {
+  if (_.isEmpty(shipId)) {
     return false
   }
   const mode = getStore(`config.plugin.${PLUGIN_NAME}.mode`)
@@ -25,8 +25,7 @@ export const canBePushed = ship => {
   )
   logger.log('customModeShouldNotifiedShips', customModeUnownedShips)
   logger.log('pictureModeShouldNotifiedShips', pictureModeShouldNotifiedShips)
-  const shipIsIn = group =>
-    !!_.find(group, s => +s.api_id === +ship.api_ship_id)
+  const shipIsIn = group => !!_.find(group, s => +s.api_id === +shipId)
 
   if (mode === 'custom') {
     return category === 'willnot'
