@@ -23,6 +23,14 @@ Search and install `poi-plugin-lock-reminder` in `Settings -> Plugins`
   - KanMusu not in fleet will be notified by default
   - You can check KanMusu which you don't wanna be notified
 
+## Changelog
+
+- 1.0.0-beta.3
+  - add quest & event reward check
+
+- 1.0.0-beta.2
+  - enable to select ships should be notified
+
 ## Feedback
 
 Bug report and any suggestions is welcome in [issue page](https://github.com/SoraYama/poi-plugin-lock-reminder/issues)
