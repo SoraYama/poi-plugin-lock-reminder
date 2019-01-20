@@ -19,7 +19,8 @@ class Reminder {
       case '/kcsapi/api_req_map/start':
         this.start()
         break
-      case '/kcsapi/api_req_sortie/battleresult': {
+      case '/kcsapi/api_req_sortie/battleresult':
+      case '/kcsapi/api_req_combined_battle/battleresult': {
         const dropShipId = _.get(
           this.currentRes,
           'body.api_get_ship.api_ship_id',
@@ -65,7 +66,9 @@ class Reminder {
   }
 
   checkPush = (...ids) => {
+    logger.log('checkPush ids: ', ids)
     _.each(ids, id => {
+      logger.log('id, canBePushed', id, canBePushed(id))
       if (canBePushed(id)) {
         this.shipIds.push(id)
       }

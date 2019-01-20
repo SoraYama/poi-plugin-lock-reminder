@@ -9,7 +9,7 @@
   "page": "第{{page}}页",
   "Updated info": "图鉴更新状态",
   "pictureTipWhenModeIsCustom": "当前通知模式为自定义模式。如需启用图鉴模式，请在“设置 -> 扩展程序 -> 新船提示”中设置",
-  "New KanMusu {{ships}} joined, remember to lock": "新舰娘{{ships}}加入啦，记得上锁POI!",
+  "New KanMusu {{ships}} joined, remember to lock": "舰娘{{ships}}加入啦，记得上锁POI!",
   "Unowned ships": "暂未获得的舰娘",
   "All ships": "全部舰娘",
   "Picture info": "图鉴信息",
