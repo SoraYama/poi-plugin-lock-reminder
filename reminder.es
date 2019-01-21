@@ -28,22 +28,26 @@ class Reminder {
         )
         logger.log('dropShipId: ', dropShipId)
         // 海域攻略報酬 イベント海域突破時のみ存在
-        const eventItem = _.get(this.currentRes, 'body.api_get_eventitem', {})
-        let eventRewardShipId = null
-        // 報酬種別 1=アイテム, 2=艦娘, 3=装備, 5=家具
-        if (eventItem.type === 2) {
-          eventRewardShipId = eventItem.id
-        }
-        this.checkPush(eventRewardShipId, dropShipId)
+        const eventItems = _.get(this.currentRes, 'body.api_get_eventitem', [])
+        const eventRewardShipIds = []
+        _.each(eventItems, item => {
+          // 報酬種別 1=アイテム, 2=艦娘, 3=装備, 5=家具
+          if (+item.type === 2) {
+            eventRewardShipIds.push(item.api_id)
+          }
+        })
+        this.checkPush(dropShipId, ...eventRewardShipIds)
         break
       }
       case '/kcsapi/api_req_quest/clearitemget': {
-        // 11=艦船
-        const bonus = _.get(this.currentRes, 'body.api_api_bounus', {})
+        const bonus = _.get(this.currentRes, 'body.api_bounus', [])
         logger.log('quest clear bonus: ', bonus)
-        if (+_.get(bonus, 'api_type', null) === 11) {
-          this.checkPush(_.get(bonus, 'api_item.api_ship_id', null))
-        }
+        const bonusShipIds = _.map(
+          // 11=艦船
+          _.filter(bonus, i => +i.api_type === 11),
+          ship => _.get(ship, 'api_item.api_ship_id', null),
+        )
+        this.checkPush(...bonusShipIds)
         break
       }
       case '/kcsapi/api_get_member/picture_book': {
