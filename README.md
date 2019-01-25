@@ -6,15 +6,17 @@ A [POI](https://poi.io) plugin which can notify admineral to lock new Kanmusu wh
 
 ## Install
 
-Search and install `poi-plugin-lock-reminder` in `Settings -> Plugins`
+- download straitly from POI plugin list
+
+- Search and install `poi-plugin-lock-reminder` in `Settings -> Plugins`
 
 ## Usage
 
-- Set mode in `Settings -> Plugins -> Ship Reminder`
+- Set mode in `Settings -> Plugins -> New Ship Reminder`
 
 - Assets mode
 
-  - You need to enter Assets first
+  - You need to enter Assets page first
   - Click every page
   - Only KanMusu NOT IN album will be notified
   - Remember to sync album info when new KanMusu joined
@@ -25,6 +27,12 @@ Search and install `poi-plugin-lock-reminder` in `Settings -> Plugins`
 
 ## Changelog
 
+- 1.0.1
+  - update i18n
+
+- 1.0.0
+  - bug fix
+
 - 1.0.0-beta.3
   - add quest & event reward check
 
@@ -34,6 +42,12 @@ Search and install `poi-plugin-lock-reminder` in `Settings -> Plugins`
 ## Feedback
 
 Bug report and any suggestions is welcome in [issue page](https://github.com/SoraYama/poi-plugin-lock-reminder/issues)
+
+## Thanks to
+
+- [Janvran](https://github.com/Javran) for idea on Chinese plugin name
+
+- [耀月知夏](https://www.weibo.com/yueyey1113) for Japanese translation
 
 ## LICENSE
 
