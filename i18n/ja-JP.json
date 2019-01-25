@@ -7,7 +7,7 @@
   "Custom mode": "カスタムモード",
   "Notify mode": "通知の設定",
   "page": "第{{page}}ページ",
-  "Updated info": "図鑑更新の情報",
+  "Updated info": "図鑑データ読み取り　進捗状況",
   "pictureTipWhenModeIsCustom": "カスタムモードが有効になっている。図鑑モードを切り替えるには、「設定」→「プラグイン」→「新艦入手通知」で設定してください。",
   "New KanMusu {{ships}} joined, remember to lock": "艦娘{{ships}}を発見しました！ロックを忘れないように",
   "Unowned ships": "未所持艦",
