@@ -2,16 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { connect } from 'react-redux'
-import {
-  map,
-  groupBy,
-  get,
-  find,
-  every,
-  isEmpty,
-  flatMap,
-  compact,
-} from 'lodash'
+import { map, groupBy, get, find, isEmpty, flatMap, compact } from 'lodash'
 import styled from 'styled-components'
 import {
   H4,
@@ -124,15 +115,16 @@ class ShipReminder extends React.PureComponent {
       category,
     } = this.props
     const { customIsOpen } = this.state
-    const isInitialed = !every(unownedShips, s => isEmpty(s))
+    const isInitiallized = !isEmpty(originShips)
     const pageOptions = Array(6)
       .fill()
       .map((_, idx) => idx + 1)
     logger.log('unownedShips: \n', unownedShips)
+    logger.log('isInitiallized', isInitiallized)
     if (mode === 'picture') {
       this.setState({ customIsOpen: false })
     }
-    return isInitialed ? (
+    return isInitiallized ? (
       <ReminderWrapper>
         <H4>
           {t('Custom mode')}
@@ -155,7 +147,7 @@ class ShipReminder extends React.PureComponent {
           <RadioCheck
             label={t('Selected ships will')}
             configName={`plugin.${PLUGIN_NAME}.customNotifyCategory`}
-            default="willnot"
+            default={isEmpty(unownedShips) ? 'will' : 'willnot'}
             options={[
               {
                 label: t('will not be notified'),
