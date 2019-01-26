@@ -29,6 +29,9 @@ A [POI](https://poi.io) plugin which can notify admineral to lock new Kanmusu wh
 
 ## Changelog
 
+- 1.0.4
+  - add default value in `canBePushed`
+
 - 1.0.3
   - fix isInitiallized logic
 

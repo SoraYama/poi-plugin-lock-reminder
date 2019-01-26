@@ -147,7 +147,7 @@ class ShipReminder extends React.PureComponent {
           <RadioCheck
             label={t('Selected ships will')}
             configName={`plugin.${PLUGIN_NAME}.customNotifyCategory`}
-            default={isEmpty(unownedShips) ? 'will' : 'willnot'}
+            default="willnot"
             options={[
               {
                 label: t('will not be notified'),

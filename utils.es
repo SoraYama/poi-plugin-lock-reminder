@@ -17,8 +17,9 @@ export const canBePushed = shipId => {
   if (!shipId) {
     return false
   }
-  const mode = getStore(`config.plugin.${PLUGIN_NAME}.mode`)
-  const category = getStore(`config.plugin.${PLUGIN_NAME}.customNotifyCategory`)
+  const mode = getStore(`config.plugin.${PLUGIN_NAME}.mode`) || 'custom'
+  const category =
+    getStore(`config.plugin.${PLUGIN_NAME}.customNotifyCategory`) || 'willnot'
   const customModeSelectedShips = selectedShipsSelector(getStore())
   const customModeUnownedShips = customModeShouldNotifiedSelector(getStore())
   const pictureModeShouldNotifiedShips = pictureModeShouldNotifiedSelector(
