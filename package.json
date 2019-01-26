@@ -29,10 +29,7 @@
     "title": "Ship Reminder",
     "description": "Remind to lock new KanMusu",
     "icon": "fa/lock",
-    "priority": 99,
-    "apiVer": {
-      "10.99.99": "1.0.0"
-    }
+    "priority": 99
   },
   "devDependencies": {
     "@commitlint/cli": "^7.2.1",

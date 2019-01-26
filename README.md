@@ -4,6 +4,8 @@ A [POI](https://poi.io) plugin which can notify admineral to lock new Kanmusu wh
 
 [![npm version](https://badge.fury.io/js/poi-plugin-lock-reminder.svg)](https://badge.fury.io/js/poi-plugin-lock-reminder)
 
+> **Notice: require POI ^10**
+
 ## Install
 
 - download straitly from POI plugin list
@@ -27,6 +29,9 @@ A [POI](https://poi.io) plugin which can notify admineral to lock new Kanmusu wh
 
 ## Changelog
 
+- 1.0.2
+  - fix apiVer
+
 - 1.0.1
   - update i18n
 
@@ -41,11 +46,11 @@ A [POI](https://poi.io) plugin which can notify admineral to lock new Kanmusu wh
 
 ## Feedback
 
-Bug report and any suggestions is welcome in [issue page](https://github.com/SoraYama/poi-plugin-lock-reminder/issues)
+Bug report and any suggestions are welcome in [issue page](https://github.com/SoraYama/poi-plugin-lock-reminder/issues)
 
-## Thanks to
+## Thanks To
 
-- [Janvran](https://github.com/Javran) for idea on Chinese plugin name
+- [Janvran](https://github.com/Javran) for idea of Chinese plugin name
 
 - [耀月知夏](https://www.weibo.com/yueyey1113) for Japanese translation
 
