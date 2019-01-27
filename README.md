@@ -56,7 +56,7 @@ Bug report and any suggestions are welcome in [issue page](https://github.com/So
 
 ## Thanks To
 
-- [Janvran](https://github.com/Javran) for idea of Chinese plugin name
+- [Javran](https://github.com/Javran) for idea of Chinese plugin name
 
 - [耀月知夏](https://www.weibo.com/yueyey1113) for Japanese translation
 
