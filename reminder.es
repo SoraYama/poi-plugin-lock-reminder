@@ -32,7 +32,7 @@ class Reminder {
         const eventRewardShipIds = []
         _.each(eventItems, item => {
           // 報酬種別 1=アイテム, 2=艦娘, 3=装備, 5=家具
-          if (+item.type === 2) {
+          if (+item.api_type === 2) {
             eventRewardShipIds.push(item.api_id)
           }
         })
@@ -99,19 +99,18 @@ class Reminder {
     )
     logger.log('shipNames: ', shipNames)
     if (!_.isEmpty(_.compact(shipNames))) {
-      toast(
-        i18next.t(
-          `${PLUGIN_NAME}:New KanMusu {{ships}} joined, remember to lock`,
-          {
-            ships: shipNames.join(', '),
-          },
-        ),
+      const text = i18next.t(
+        `${PLUGIN_NAME}:New KanMusu {{ships}} joined, remember to lock`,
         {
-          intent: 'success',
-          icon: 'tick',
-          timeout: 0,
+          ships: shipNames.join(', '),
         },
       )
+      toast(text, {
+        intent: 'success',
+        icon: 'tick',
+        timeout: 0,
+      })
+      window.notify(text)
     }
     this.reset()
   }
