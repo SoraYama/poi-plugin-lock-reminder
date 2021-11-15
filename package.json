@@ -1,6 +1,6 @@
 {
   "name": "poi-plugin-lock-reminder",
-  "version": "1.0.6-beta.0",
+  "version": "1.0.6-beta.1",
   "description": "A poi plugin for reminding to lock new kanmusu.",
   "main": "index.es",
   "scripts": {
