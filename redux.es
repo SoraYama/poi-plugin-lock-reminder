@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 // import { keyBy, get, map } from 'lodash'
 import { get, map, uniq, flatMap, compact } from 'lodash'
-import { shipRemodelInfoSelector } from 'views/utils/selectors'
+import { shipRemodelInfoSelector } from 'subtender/poi/selectors'
 
 import { PLUGIN_NAME, logger } from './utils'
 

@@ -1,11 +1,11 @@
 import _ from 'lodash'
 import {
   shipsSelector,
-  shipRemodelInfoSelector,
   constSelector,
   configSelector,
   extensionSelectorFactory,
 } from 'views/utils/selectors'
+import { shipRemodelInfoSelector } from 'subtender/poi/selectors'
 import { createSelector } from 'reselect'
 
 import { CONFIG_PATH, PLUGIN_NAME } from '../utils'
