@@ -18,7 +18,8 @@ export const unownedShipsSelector = createSelector(
     _.map(
       _.filter(
         _.keys(remodelChains),
-        id => !_.find(ships, s => id === originMstIdOf[String(s.api_ship_id)]),
+        id =>
+          !_.find(ships, s => +id === +originMstIdOf[String(s.api_ship_id)]),
       ),
       id => $ships[id],
     ),
